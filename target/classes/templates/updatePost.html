@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Update Post</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Edit your Curiosity</h1>
+        <hr>
+        <h2>Update Post</h2>
+
+        <form action="#" th:action="@{/savePost}" th:object="${post}" method="POST">
+            
+            <input type="hidden" th:field="*{postId}" /> 
+            
+            <input type="text" th:field="*{title}" placeholder="Post Title " class="form-control mb-4 col-4">
+
+            <input type="text" th:field="*{content}" placeholder="content" class="form-control mb-4 col-4">
+            
+            <input type="text" th:field="*{tags[0].name}" placeholder="tags" class="form-control mb-4 col-4">
+
+            <input type="hidden" name="author" th:value="${#authentication.getPrincipal().getUsername().split('@')[0]}">
+
+            <input type="text" th:field="*{publishedAt}" placeholder="published at" class="form-control mb-4 col-4">
+
+            <input type="checkbox" th:field="*{isPublished}" placeholder="is published" class="form-control mb-4 col-4">
+
+            <button type="submit" class="btn btn-info col-2"> Save Post</button>
+        </form>
+
+        <hr>
+
+        <a th:href="@{/}"> Back to Post List</a>
+    </div>
+</body>
+
+</html>

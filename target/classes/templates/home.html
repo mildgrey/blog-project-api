@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="ISO-8859-1">
+<title>Featured Posts</title>
+
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+	integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	crossorigin="anonymous">
+<style type="text/css">
+.grid-container-element {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-gap: 20px;
+	border: 1px solid black;
+}
+
+.grid-child-element {
+	margin: 10px;
+	border: 1px solid red;
+}
+
+p {
+	text-align: center;
+}
+
+.tagDiv,li {
+	display: inline-block;
+}
+</style>
+
+	<link rel="stylesheet"
+		  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+		  integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+		  crossorigin="anonymous">
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+					aria-controls="navbar">
+				<span class="sr-only">Toggle navigation</span> <span
+					class="icon-bar"></span> <span class="icon-bar"></span> <span
+					class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="#" th:href="@{/}"></a>
+		</div>
+	</div>
+</nav>
+<br>
+<br>
+<br>
+
+
+
+	<span><a th:href="@{/login}">login</a></span>
+	<span><a th:href="@{/logout}">logout</a></span>
+	<h1>Posts List</h1>
+
+	<a th:if="not ${#authentication.getPrincipal().equals('anonymousUser')}" th:href="@{/createNewPost}" class="btn btn-primary btn-sm mb-3">
+		Add Post </a>
+
+	<br>
+	
+	
+	<form action="#" th:action="@{'/page/'}" style="display:inline-block">
+	<input name="keyword" th:value="*{keyword}" />
+	<h3>Authors</h3>
+	<ul>
+       <li th:each="author : ${allAuthor}">
+         <input name="author" type="checkbox" th:value="${author}" />
+         <label  th:text="${author}"></label>
+      </li>
+    </ul>
+    
+    <h3>Tags</h3>
+	<ul>
+       <li th:each="tagName : ${allTagName}">
+         <input name="tagName" type="checkbox" th:value="${tagName}" />
+         <label  th:text="${tagName}"></label>
+      </li>
+    </ul>
+	<button th:type="submit" >submit</button>
+	</form>
+	<a th:href="@{'/page/' }" class="btn btn-sm " style="color:#fff;background-color:#212529" >Reset</a>
+	
+
+	<a th:href="@{'/page/' + ${currentPage} + '?sortField=createdAt&sortDir=' + ${reverseSortDir}}">Created At</a>
+	<a th:href="@{'/page/' + ${currentPage} + '?sortField=title&sortDir=' + ${reverseSortDir}}">Title</a>
+	
+	
+  
+
+	
+	
+	<div class="grid-container-element">
+	
+		<div class="grid-child-element" th:each="post : ${listPosts}">
+			<p>
+				<a th:href="@{/fullContent/{id}(id=${post.postId})}"
+					class="btn btn-secondary">View Full Post</a>
+			</p>
+			<div>
+				<h1 th:text="${post.title}"></h1>
+				<p th:text="${post.excerpt}"></p>
+				<h5 th:text="${post.author}"></h5>
+				<p th:text="${post.publishedAt}"></p>
+				<p th:text="${post.createdAt}"></p>
+				<p th:text="${post.updatedAt}"></p>
+			</div>
+			<div th:each="tag:${post.tags}" class="tagDiv">
+				#<span th:text="${tag.name}"></span>
+			</div>
+		</div>
+
+		<div th:if="${totalPages>1}">
+			<div class="row col-sm-10">
+				<div class="col-sm-2" >
+				Total Items:[[${totalItems}]]
+				</div>
+				
+				<div class="col-sm-1">
+					 <a
+						th:if="${currentPage >1}" th:href="@{'/page/'+${currentPage-1}+ '?sortField='+ ${sortField} + '&sortDir=' + ${sortDir} + '&keyword='+${keyword}}">Previous</a>
+						<span th:unless="${currentPage > 1}">Previous</span> 
+				</div><pre>     </pre>
+				
+				<div class="col-sm-1">
+					<a th:if="${currentPage<totalPages}"
+						th:href="@{'/page/'+${currentPage+1}+ '?sortField='+ ${sortField} + '&sortDir=' + ${sortDir}+ '&keyword='+${keyword}}">Next</a> <span
+						th:unless="${currentPage<totalPages}">Next</span>
+				</div> <pre>  </pre> 
+				
+				<div class="col-sm-1">
+					<a th:if="${currentPage<totalPages}"
+						th:href="@{'/page/'+${totalPages}+ '?sortField='+ ${sortField} + '&sortDir=' + ${sortDir}+ '&keyword='+${keyword}}">Last</a> <span
+						th:unless="${currentPage<totalPages}">Last</span>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</body>
+</html>

@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Single Post Page </title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<style type="text/css">	
+.grid-container-element { 
+    
+    grid-template-columns: 1fr 1fr; 
+    grid-gap: 20px; 
+    border: 1px solid black; 
+    margin:10px;
+    padding:10px;
+} 
+p{
+text-align:center;
+}
+h1{
+text-align:center;
+}
+	</style>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+</head>
+
+<body>
+
+<!-- create navigation bar ( header) -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                    aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span> <span
+                    class="icon-bar"></span> <span class="icon-bar"></span> <span
+                    class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#" th:href="@{/}"></a>
+        </div>
+    </div>
+</nav>
+<br>
+<br>
+<br>
+
+
+
+         
+		 <h1 th:text="${post.title}"></h1>
+        <a th:href="@{/}" class="btn btn-primary btn-sm mb-3"> Home </a><br>
+		<div class="grid-container-element" >
+       
+                    <p th:text="${post.content}"></p>
+                    <h5 th:text="${post.author}"></h5>
+                    <p th:text="${post.publishedAt}"></p>
+                    <th:p th:text="${post.createdAt}"></th:p>
+                    <th:p th:text="${post.updatedAt}"></th:p>
+
+                    <p th:if="not ${#authentication.getPrincipal().equals('anonymousUser')}">
+            <th:p th:if="${#strings.equals(#authentication.getPrincipal().getUsername().split('@')[0], post.author)}">
+                            <a  th:href="@{/updatePost/{id}(id=${post.postId})}" class="btn btn-primary">Update</a>
+                            <a th:href="@{/deletePost/{id}(id=${post.postId})}" class="btn btn-danger">Delete Post</a>
+                </th:p>
+                    </p>
+
+
+                   <div class="grid-container-element" th:each="comment : ${post.comments}">
+        
+                    <p th:text="${comment.name}"></p>
+                    <h5 th:text="${comment.email}"></h5>
+                    <p th:text="${comment.textComment}"></p>
+                       <p th:if="not ${#authentication.getPrincipal().equals('anonymousUser')}">
+                           <th:p th:if="${#strings.equals(#authentication.getPrincipal().getUsername().split('@')[0], post.author) or #authentication.getPrincipal().getUsername().split('@')[0]=='pogo'}">
+                                <a th:href="@{/editComment/{commentId}/(commentId=${comment.commentId})}" class = "btn btn-primary btn-sm" >Edit Comment</a>
+                                <a th:href="@{/deleteComment/{commentId}(commentId=${comment.commentId})}" class = "btn btn-danger btn-sm" >Delete Comment</a>
+                           </th:p>
+                       </p>
+          </div> 
+                  
+            <form  th:action="@{/createComment/{id}(id=${post.postId})}" th:object="${comment}"  method="POST">
+              <p th:if="${#authentication.getPrincipal().equals('anonymousUser')}">
+               <input type="text" name="name" placeholder="Enter your name " class="form-control mb-4 col-4">
+                <input type="text" name="email" placeholder="Enter your email" class="form-control mb-4 col-4">
+              </p>
+                <input type="text" name="textComment" placeholder="Enter comment" class="form-control mb-4 col-4">
+                <button type="submit" class="btn btn-info col-2"> Save Comment</button>
+            </form>
+
+          </div>
+       
+   
+</body>
+
+</html>

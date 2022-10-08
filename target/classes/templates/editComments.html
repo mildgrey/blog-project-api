@@ -1,0 +1,15 @@
+<!DOCTYPE html >
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+ <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body>
+ 
+	<form th:action="@{/createComment/{id}(id=${comment.post.postId})}"  method="POST" th:object="${comment}">
+            <input type="text" th:field="${comment.textComment}" class="form-control mb-4 col-4"/>
+            <button type="submit" class="btn btn-info col-2" > Save Comment</button>
+        </form>
+</body>
+</html>
